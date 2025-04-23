@@ -359,14 +359,19 @@ export class ApiService {
       if (data && data.data && Array.isArray(data.data)) {
         // Filtrer côté client avec le nom du genre (l'attribut est 'name' et non 'title')
         const lowercaseQuery = query.toLowerCase();
-        const filteredGenres = data.data.filter((item: any) => {
+        interface GenreApiItem {
+          id: number;
+          attributes?: { name: string };
+          name?: string;
+        }
+        const filteredGenres = data.data.filter((item: GenreApiItem) => {
           // Vérifier dans les attributs ou directement dans l'objet
           const name = item.attributes?.name || item.name || '';
           return name.toLowerCase().includes(lowercaseQuery);
         });
         
         // Mapper les résultats au format attendu par le frontend
-        return filteredGenres.map((item: any) => ({
+        return filteredGenres.map((item: GenreApiItem) => ({
           id: item.id,
           // Pour maintenir la compatibilité, on mappe name à title
           title: item.attributes?.name || item.name || ''
