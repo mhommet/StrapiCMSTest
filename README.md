@@ -60,7 +60,6 @@ npm run dev
 
 -   `/backend`: Application Strapi CMS
 -   `/frontend`: Application React avec Vite
--   `.env`: Variables d'environnement (à créer à partir de .env.example)
 
 ## Schéma Relationnel
 
