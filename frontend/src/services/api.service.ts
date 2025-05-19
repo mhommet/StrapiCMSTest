@@ -141,25 +141,24 @@ export class ApiService {
                 ?.map((g) => g.id)
                 .filter((id): id is number => id !== undefined)
 
-            console.log('Updating game with data:', {
-                title: game.title,
-                description: game.description,
-                release_date: game.release_date,
-                genres: genreIds && genreIds.length > 0 ? { connect: genreIds } : undefined,
-            })
+            const requestData = {
+                data: {
+                    title: game.title,
+                    description: game.description,
+                    release_date: game.release_date,
+                    genres: {
+                        set: genreIds || [],
+                    },
+                },
+            }
+
+            console.log('Updating game with data:', requestData)
 
             const response = await fetch(`${API_URL}/games/${id}`, {
                 method: 'PUT',
                 headers: DEFAULT_HEADERS,
                 credentials: 'include',
-                body: JSON.stringify({
-                    data: {
-                        title: game.title,
-                        description: game.description,
-                        release_date: game.release_date,
-                        genres: genreIds && genreIds.length > 0 ? { connect: genreIds } : undefined,
-                    },
-                }),
+                body: JSON.stringify(requestData),
             })
 
             const { data } = await handleResponse<{ data: StrapiGameData }>(response)
@@ -197,27 +196,35 @@ export class ApiService {
      */
     static async searchGenres(query: string): Promise<Genre[]> {
         try {
-            const response = await fetch(
-                `${API_URL}/genres?filters[name][$containsi]=${encodeURIComponent(query)}`,
-                {
-                    method: 'GET',
-                    headers: DEFAULT_HEADERS,
-                    credentials: 'include',
-                }
-            )
+            console.log('Searching for genres with query:', query)
+
+            const response = await fetch(`${API_URL}/genres`, {
+                method: 'GET',
+                headers: DEFAULT_HEADERS,
+                credentials: 'include',
+            })
 
             const { data } = await handleResponse<{
-                data: Array<{ id: number; attributes: { name: string } }>
+                data: Array<{ id: number; name: string }>
             }>(response)
 
-            console.log('Genre search results:', data)
+            console.log('Raw genres data:', JSON.stringify(data, null, 2))
 
-            const genres = data.map((genre) => ({
-                id: genre.id,
-                name: genre.attributes.name,
-            }))
+            // Filtrer les résultats pour inclure les genres qui contiennent la recherche (insensible à la casse)
+            const genres = data
+                .filter((genre) => {
+                    const matches = genre.name.toLowerCase().includes(query.toLowerCase())
+                    console.log(
+                        `Checking genre "${genre.name}" against query "${query}": ${matches}`
+                    )
+                    return matches
+                })
+                .map((genre) => ({
+                    id: genre.id,
+                    name: genre.name,
+                }))
 
-            console.log('Transformed genres:', genres)
+            console.log('Filtered genres:', genres)
             return genres
         } catch (error) {
             console.error('Error searching genres:', error)
