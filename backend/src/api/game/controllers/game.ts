@@ -29,19 +29,17 @@ export default factories.createCoreController('api::game.game', ({ strapi }) => 
     // Surcharge de la méthode find pour logger les jeux
     async find(ctx) {
         try {
-            const { data, meta } = await super.find(ctx)
-            const withGenres = await strapi.db.query('api::game.game').findMany({
-                where: { id: { $in: data.map((game: any) => game.id) } },
+            const games = await strapi.db.query('api::game.game').findMany({
                 populate: ['genres'],
             })
 
-            console.log('Raw games data:', withGenres)
-            const transformedGames = withGenres.map(transformGameResponse)
+            console.log('Raw games data:', games)
+            const transformedGames = games.map(transformGameResponse)
             console.log('Transformed games data:', transformedGames)
 
             return {
                 data: transformedGames,
-                meta,
+                meta: {},
             }
         } catch (error) {
             console.error('Error in find controller:', error)
@@ -85,27 +83,14 @@ export default factories.createCoreController('api::game.game', ({ strapi }) => 
             console.log(`Controller: Attempting to update game with ID ${id}`)
             console.log('Update data:', data)
 
-            // Préparer les données de mise à jour
-            const updateData: any = {
-                title: data.title,
-                description: data.description,
-                release_date: data.release_date,
-            }
-
-            // Gérer les relations de genres si présentes
-            if (data.genres) {
-                if (data.genres.connect) {
-                    updateData.genres = { connect: data.genres.connect }
-                } else if (data.genres.disconnect) {
-                    updateData.genres = { disconnect: data.genres.disconnect }
-                }
-            }
-
-            console.log('Final update data:', updateData)
-
             const updatedGame = await strapi.db.query('api::game.game').update({
                 where: { id },
-                data: updateData,
+                data: {
+                    title: data.title,
+                    description: data.description,
+                    release_date: data.release_date,
+                    genres: data.genres,
+                },
                 populate: ['genres'],
             })
 
@@ -131,9 +116,9 @@ export default factories.createCoreController('api::game.game', ({ strapi }) => 
 
             console.log(`Controller: Attempting to delete game with ID ${id}`)
 
-            // Utiliser la méthode de service mise à jour qui utilise l'API Query Engine
-            const gameService = strapi.service('api::game.game')
-            const deletedEntry = await gameService.delete(id)
+            const deletedEntry = await strapi.db.query('api::game.game').delete({
+                where: { id },
+            })
 
             if (!deletedEntry) {
                 return ctx.notFound(`Game with ID ${id} not found or could not be deleted`)
@@ -157,10 +142,30 @@ export default factories.createCoreController('api::game.game', ({ strapi }) => 
     },
 
     async create(ctx) {
-        const response = await super.create(ctx)
-        if (response.data) {
-            response.data = transformGameResponse(response.data)
+        try {
+            const { data } = ctx.request.body || {}
+
+            if (!data) {
+                return ctx.badRequest('Data is required')
+            }
+
+            console.log('Creating game with data:', data)
+
+            // Créer le jeu avec les relations
+            const game = await strapi.db.query('api::game.game').create({
+                data: {
+                    title: data.title,
+                    description: data.description,
+                    release_date: data.release_date,
+                    genres: data.genres,
+                },
+                populate: ['genres'],
+            })
+
+            return { data: transformGameResponse(game) }
+        } catch (error) {
+            console.error('Error creating game:', error)
+            return ctx.badRequest('Failed to create game', { error: error.message })
         }
-        return response
     },
 }))
