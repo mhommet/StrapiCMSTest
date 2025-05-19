@@ -1,30 +1,97 @@
-testPassword!1
+# Strapi CMS + Frontend
 
-#### Prérequis
-- Node.js (version 16 ou supérieure)
-- npm (installé avec Node.js)
-- Git
+## Prérequis
 
-#### Étapes d'installation
-1. Clonez le projet :
-   ```bash
-   git clone <URL_DU_REPO>
-   cd <DOSSIER_DU_PROJET>
-   ```
-2. Installez et démarrez le backend :
-   ```bash
-   cd backend
-   npm install
-   npm run develop
-   ```
-3. Installez et démarrez le frontend :
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-4. Accédez à l'application :
-   - Backend : `http://localhost:1337`
-   - Frontend : `http://localhost:5173`
+-   Windows 11
+-   Node.js (version 18 ou supérieure)
+-   npm (inclus avec Node.js)
+-   Git
 
+## Installation
 
+1. Cloner le repository
+
+```bash
+git clone https://github.com/mhommet/StrapiCMSTest.git
+cd StrapiCMSTest
+```
+
+2. Installer les dépendances du backend
+
+```bash
+cd backend
+npm install
+```
+
+3. Installer les dépendances du frontend
+
+```bash
+cd ../frontend
+npm install
+```
+
+## Démarrage
+
+1. Démarrer le backend Strapi
+
+```bash
+cd backend
+npm run dev
+```
+
+2. Dans un nouveau terminal, démarrer le frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+## Accès aux applications
+
+-   Frontend: http://localhost:5173
+-   Strapi CMS: http://localhost:1338/admin
+
+## Identifiants Strapi Admin
+
+-   Email: admin@test.fr
+-   Mot de passe: Test1234!
+
+## Structure du projet
+
+-   `/backend`: Application Strapi CMS
+-   `/frontend`: Application React avec Vite
+-   `.env`: Variables d'environnement (à créer à partir de .env.example)
+
+## Schéma Relationnel
+
+![Schéma relationnel](SchémaRelationnel.png)
+
+## Diagramme de Classes
+
+![Diagramme de classes](DiagrammeDeClasse.png)
+
+## Diagramme de Cas d'Utilisation
+
+![Diagramme de cas d'utilisation](CasUtilisation.png)
+
+## Diagramme de Séquence (Création d'un jeu)
+
+![Diagramme de séquence](Sequence.png)
+
+## Routes API
+
+### Jeux (Games)
+
+-   `GET /api/games` - Liste tous les jeux
+-   `GET /api/games/:id` - Récupère un jeu spécifique
+-   `POST /api/games` - Crée un nouveau jeu
+-   `PUT /api/games/:id` - Met à jour un jeu existant
+-   `DELETE /api/games/:id` - Supprime un jeu
+
+### Genres
+
+-   `GET /api/genres` - Liste tous les genres
+-   `GET /api/genres/:id` - Récupère un genre spécifique
+-   `POST /api/genres` - Crée un nouveau genre
+-   `PUT /api/genres/:id` - Met à jour un genre existant
+-   `DELETE /api/genres/:id` - Supprime un genre

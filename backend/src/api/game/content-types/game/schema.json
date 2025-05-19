@@ -1,31 +1,35 @@
 {
-  "kind": "collectionType",
-  "collectionName": "games",
-  "info": {
-    "singularName": "game",
-    "pluralName": "games",
-    "displayName": "games",
-    "description": ""
-  },
-  "options": {
-    "draftAndPublish": false
-  },
-  "attributes": {
-    "title": {
-      "type": "string",
-      "required": true
+    "kind": "collectionType",
+    "collectionName": "games",
+    "info": {
+        "singularName": "game",
+        "pluralName": "games",
+        "displayName": "games",
+        "description": ""
     },
-    "description": {
-      "type": "text"
+    "options": {
+        "draftAndPublish": false
     },
-    "release_date": {
-      "type": "date"
+    "pluginOptions": {
+        "populateCreatorFields": true
     },
-    "genres": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::genre.genre",
-      "mappedBy": "game"
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text"
+        },
+        "release_date": {
+            "type": "date"
+        },
+        "genres": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "api::genre.genre",
+            "inversedBy": "games",
+            "dominant": true
+        }
     }
-  }
 }

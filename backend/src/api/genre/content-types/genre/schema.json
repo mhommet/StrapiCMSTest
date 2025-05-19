@@ -1,25 +1,28 @@
 {
-  "kind": "collectionType",
-  "collectionName": "genres",
-  "info": {
-    "singularName": "genre",
-    "pluralName": "genres",
-    "displayName": "genre",
-    "description": ""
-  },
-  "options": {
-    "draftAndPublish": false
-  },
-  "attributes": {
-    "name": {
-      "type": "string",
-      "required": true
+    "kind": "collectionType",
+    "collectionName": "genres",
+    "info": {
+        "singularName": "genre",
+        "pluralName": "genres",
+        "displayName": "genre",
+        "description": ""
     },
-    "game": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::game.game",
-      "inversedBy": "genres"
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {
+        "populateCreatorFields": true
+    },
+    "attributes": {
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "games": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "api::game.game",
+            "mappedBy": "genres"
+        }
     }
-  }
 }
