@@ -3,7 +3,7 @@
 ## Prérequis
 
 -   Windows 11
--   Node.js (version 18 ou supérieure)
+-   Node.js 22
 -   npm (inclus avec Node.js)
 -   Git
 
