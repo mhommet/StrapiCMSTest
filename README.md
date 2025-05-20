@@ -64,6 +64,7 @@ Vous pouvez utiliser ces identifiants par exemple :
 2. Configurez les permissions :
     - Allez dans le Settings -> "Users & Permissions Plugin" -> "Roles"
     - Pour les collections "Game" et "Genre", cochez toutes les permissions (find, findOne, create, update, delete)
+    - Ne pas oublier de cliquer sur SAVE en haut à droite
 
 ## Structure du projet
 
