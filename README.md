@@ -52,10 +52,18 @@ npm run dev
 -   Frontend: http://localhost:5173
 -   Strapi CMS: http://localhost:1338/admin
 
-## Identifiants Strapi Admin
+## Configuration de Strapi
+
+1. Après l'installation, créez un nouveau compte administrateur Strapi en accédant à http://localhost:1338/admin
+
+Vous pouvez utiliser ces identifiants par exemple :
 
 -   Email: admin@test.fr
 -   Mot de passe: Test1234!
+
+2. Configurez les permissions :
+    - Allez dans le Settings -> "Users & Permissions Plugin" -> "Roles"
+    - Pour les collections "Game" et "Genre", cochez toutes les permissions (find, findOne, create, update, delete)
 
 ## Structure du projet
 
