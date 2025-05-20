@@ -21,6 +21,7 @@ cd StrapiCMSTest
 ```bash
 cd backend
 npm install
+npm rebuild
 ```
 
 3. Installer les dépendances du frontend
